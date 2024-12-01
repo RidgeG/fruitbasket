@@ -2,17 +2,49 @@
 import './App.css'
 import {useState} from "react";
 
+const CounterButton = ({ onIncrease, onDecrease }) => {
+    return (
+        <div>
+            <button onClick={onDecrease}>-</button>
+            <button onClick={onIncrease}>+</button>
+        </div>
+    );
+};
+
+const InputField = ({ label, value, onChange, type = 'text' }) => {
+    return (
+        <div>
+            <label>{label}:</label>
+            <input
+                type={type}
+                value={value}
+                onChange={onChange}
+            />
+        </div>
+    );
+};
+
+const ActionButton = ({ onClick, label, disabled = false }) => {
+    return (
+        <button onClick={onClick} disabled={disabled}>
+            {label}
+        </button>
+    );
+};
+
+
 const FruitCounter = ({ fruit, amount, onIncrease, onDecrease }) => {
     return(
         <div>
             <h3>{fruit}</h3>
             <p>Aantal: {amount}</p>
-            <button onClick={onDecrease}>-</button>
-            <button onClick={onIncrease}>+</button>
+            <CounterButton onIncrease={onIncrease} onDecrease={onDecrease} />
         </div>
     );
 
 };
+
+
 
 function App() {
     const [aardbeien, setAardbeien] = useState(0);
@@ -81,9 +113,9 @@ function App() {
         console.log({
             fruit: {
                 bananen,
-                aardeien,
+                aardbeien,
                 appels,
-                kiwis
+                kiwi
             },
             formulier: {
                 voornaam,
@@ -127,7 +159,7 @@ function App() {
                 onIncrease={() => increaseAmount('kiwi')}
                 onDecrease={() => decreaseAmount('kiwi')}
             />
-            <button onClick={resetCounter}>Reset</button>
+            <ActionButton onClick={resetCounter} label='Reset fruit' />
             <p>Huidige hoeveelheid fruit</p>
             <p>Bananen: {bananen}, Aardbeien: {aardbeien}, Appels: {appels}, Kiwi: {kiwi}</p>
         </div>
@@ -135,42 +167,10 @@ function App() {
         <h2>Bestelformulier</h2>
 
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="voornaam">Voornaam:</label>
-                <input
-                    type="text"
-                    id="voornaam"
-                    value={voornaam}
-                    onChange={(e) => setVoornaam(e.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor="achternaam">Achternaam:</label>
-                <input
-                    type="text"
-                    id="achternaam"
-                    value={achternaam}
-                    onChange={(e) => setAchternaam(e.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor="leeftijd">Leeftijd:</label>
-                <input
-                    type="number"
-                    id="leeftijd"
-                    value={leeftijd}
-                    onChange={(e) => setLeeftijd(e.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor="postcode">Postcode:</label>
-                <input
-                    type="text"
-                    id="postcode"
-                    value={postcode}
-                    onChange={(e) => setPostcode(e.target.value)}
-                />
-            </div>
+            <InputField label="Voornaam" value={voornaam} onChange={(e) => setVoornaam(e.target.value)} />
+            <InputField label="Achternaam" value={achternaam} onChange={(e) => setAchternaam(e.target.value)} />
+            <InputField label="Leeftijd" value={leeftijd} onChange={(e) => setLeeftijd(e.target.value)} type="number" />
+            <InputField label="Postcode" value={postcode} onChange={(e) => setPostcode(e.target.value)} />
             <div>
                 <label htmlFor="frequentie">Bezorgfrequentie:</label>
                 <select
@@ -204,7 +204,7 @@ function App() {
                             checked={tijdvak === "s avonds"}
                             onChange={() => setTijdvak("s avonds")}
                         />
-                        's Avonds
+                        s Avonds
                     </label>
                 </div>
             </div>
@@ -226,14 +226,14 @@ function App() {
                     Ik ga akkoord met de voorwaarden
                 </label>
             </div>
-            <button type="submit" disabled={!akkoord}>Verzenden</button>
+            <ActionButton onClick={handleSubmit} label="Verzenden" disabled={!akkoord} />
         </form>
 
 
 </>
 
-)
-    ;
+    )
+
 }
 
 
